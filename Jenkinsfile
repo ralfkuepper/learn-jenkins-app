@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+        // This is a comment
         stage('Build') {
             agent {
                 docker {
@@ -10,11 +11,15 @@ pipeline {
                 }
             }
             steps {
+                /*
+                In the shell command above, npm ci is the step,
+                where the dependencies will be installed.
+                */
                 sh '''
                     ls -la
                     node --version
                     npm --version
-                    npm ci # for installation
+                    npm ci
                     npm run build
                 '''
             }
@@ -28,7 +33,6 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Test stage"
                     test -f build/index.html
                     npm test
                 '''
