@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-        /*
         // Build stage
         stage('Build') {
             agent {
@@ -23,7 +22,6 @@ pipeline {
                 '''
             }
         }
-        */
 
         stage('Tests') {
             parallel {
@@ -68,6 +66,24 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+
+        // Deployment
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                // In the shell command above, npm ci is the step,
+                // where the dependencies will be installed.
+                sh '''
+                    npm install netlify-cli -g
+                    netlify --version
+                '''
             }
         }
 
