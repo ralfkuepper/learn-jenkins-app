@@ -19,7 +19,7 @@ pipeline {
                 // In the shell command above, npm ci is the step,
                 // where the dependencies will be installed.
                 sh '''
-                    echo 'Very Small change'
+                    echo 'Small change'
                     ls -la
                     node --version
                     npm --version
