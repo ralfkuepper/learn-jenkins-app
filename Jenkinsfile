@@ -81,8 +81,8 @@ pipeline {
                 // In the shell command above, npm ci is the step,
                 // where the dependencies will be installed.
                 sh '''
-                    npm install netlify-cli -g
-                    netlify --version
+                    npm install netlify-cli
+                    node_modules/.bin/netlify --version
                 '''
             }
         }
