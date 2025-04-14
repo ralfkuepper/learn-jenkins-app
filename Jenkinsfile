@@ -10,7 +10,34 @@ pipeline {
     }
 
     stages {
+        // Build stage
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                // In the shell command above, npm ci is the step,
+                // where the dependencies will be installed.
+                sh '''
+                    echo 'Very Small change'
+                    ls -la
+                    node --version
+                    npm --version
+                    npm ci
+                    npm run build
+                '''
+            }
+        }
         
+        stage('Build Docker image') {
+            steps {
+                sh 'docker build -t myjenkinsapp .'
+            }
+        }
+
         stage('Deploy to AWS') {
             agent {
                 docker {
@@ -33,27 +60,6 @@ pipeline {
             }
         }
 
-        // Build stage
-        stage('Build') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-            steps {
-                // In the shell command above, npm ci is the step,
-                // where the dependencies will be installed.
-                sh '''
-                    echo 'Very Small change'
-                    ls -la
-                    node --version
-                    npm --version
-                    npm ci
-                    npm run build
-                '''
-            }
-        }
 
     }
 }
